@@ -1,0 +1,41 @@
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Runtime artifacts
+*.pid
+*.tmp
+*.temp
+*.cache
+
+# Logs
+*.log
+!raw-logs/*.log
+!raw-logs/.gitkeep
+
+# Python tooling that may appear during local experiments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Large model/cache directories should stay outside git
+models/
+model-cache/
+hf-cache/
+.cache/

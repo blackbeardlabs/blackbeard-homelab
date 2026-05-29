@@ -1,0 +1,31 @@
+# Blackbeard Labs
+
+Local LLM inference benchmarks on real mixed hardware.
+
+This repository tracks practical local inference behavior across home-lab nodes. It is a lab notebook, not a leaderboard claim set.
+
+## Node overview
+
+| Node id | Role | CPU | RAM | GPU | Current best-known/default model | Notes |
+|---|---|---|---|---|---|---|
+| node-00-v1 | NAS / archive / utility | Intel i3-7100 | 32GB DDR4 | None | N/A | Model storage and utility services |
+| node-01-v1 | Low-end baseline / offload experiments | Ryzen 5 5600 | 64GB DDR4 | GTX 1070 8GB | Small quantized models | Minimum practical baseline |
+| node-02-v1 | Midrange inference node | Ryzen 9 5950X | 128GB DDR4 | RTX 5060 Ti | Pending | Midrange CUDA test node |
+| node-03-v1 | Fast single-GPU / experimental node | Ryzen 9 9950X3D | 256GB DDR5 | RTX 5090 32GB | Qwen3.6 27B NVFP4 variant (pending confirmation) | High-speed single-GPU and NVFP4 experiments |
+| node-04-v1 (Kraken) | Multi-GPU deep-context inference | Threadripper 1950X | 128GB DDR4 | 4x RTX 3090 24GB | Qwen3.6 27B Heretic BF16 via vLLM TP=4 MTP=2 | Strong aggregate VRAM node |
+
+## Benchmark philosophy
+
+- Run the same prompts across nodes where possible.
+- Record exact launch and test commands.
+- Separate speed, memory, stability, and subjective quality notes.
+- Defer formal quality scoring for now.
+- Preserve raw logs for reproducibility.
+
+## Current recorded benchmark
+
+`node-04-v1 / Kraken` has one recorded benchmark so far: `llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved` through vLLM `0.21.0`, tensor parallel 4, `MTP=2`, `260K` context, and `gpu_memory_utilization=0.94`. The run used `prompts/prompt-01-dijkstra-js.md` through OpenWebUI and averaged roughly `29.5 tok/s` over steady active generation samples.
+
+## Scope note
+
+Values in this repository are empirical lab observations. Results can change with driver versions, backend versions, model revisions, launch parameters, and workload shape.
