@@ -12,9 +12,9 @@
 | Backend version | 0.21.0 |
 | Precision / quant | BF16 safetensors |
 | Context setting | 260000 |
-| Prompt id | `prompts/prompt-01-dijkstra-js.md` |
-| Status | Observed benchmark run |
-| Result summary | Prompt 1 completed successfully at roughly 29.5 tok/s over steady active samples; stable at `gpu_memory_utilization=0.94`. |
+| Prompt id | `prompts/prompt-01-dijkstra-js.md`, `prompts/prompt-02-heterogeneous-scheduler.md` |
+| Status | Observed benchmark runs |
+| Result summary | Prompt 1 completed at roughly 29.5 tok/s and prompt 2 completed at roughly 27.7 tok/s over steady active samples; stable at `gpu_memory_utilization=0.94`. |
 
 ## Hardware
 
@@ -63,14 +63,14 @@ vllm serve ~/models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preser
 
 | Metric | Value |
 |---|---:|
-| Prompt eval tok/s | 10.0 tok/s at initial sample; later prompt activity sample at 148.3 tok/s |
-| Generation tok/s | ~29.5 tok/s average over steady active samples; observed steady range 26.7-32.4 tok/s |
-| Total time | Request active from about 12:56:21 to 13:01:41 in server log |
-| VRAM usage | ~23.35-23.80GB per GPU in screenshot during generation |
+| Prompt eval tok/s | Prompt 1: 10.0 tok/s initial sample, later 148.3 tok/s activity sample; Prompt 2: 15.4 tok/s initial sample, later 266.5 tok/s activity sample |
+| Generation tok/s | Prompt 1: ~29.5 tok/s steady average; Prompt 2: ~27.7 tok/s steady average |
+| Total time | Prompt 1 active about 12:56:21-13:01:41; Prompt 2 active about 14:12:41-14:16:41 |
+| VRAM usage | Prompt 1: ~23.35-23.80GB per GPU; Prompt 2: ~23.35-23.84GB per GPU |
 | RAM usage | Pending |
 | GPU utilization | 97-100% in screenshot during generation |
 | CPU utilization | Pending |
-| KV cache size | GPU KV cache usage rose to 4.7%, then returned to 0.0% after completion |
+| KV cache size | Prompt 1 peak observed 4.7%; Prompt 2 peak observed 3.7%; both returned to 0.0% after completion |
 
 ## Run: 2026-05-29 prompt-01 Dijkstra
 
@@ -86,21 +86,44 @@ vllm serve ~/models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preser
 | Speculative decoding | MTP, 2 speculative tokens |
 | Draft acceptance rate | Mostly ~65-94% depending on phase |
 | Raw log | `raw-logs/2026-05-29-node-04-qwen36-heretic-prompt-01-dijkstra.log` |
+| Response | `responses/node-04-kraken-4x3090/2026-05-29-qwen36-heretic-prompt-01-dijkstra.md` |
+
+## Run: 2026-05-29 prompt-02 heterogeneous scheduler
+
+| Field | Value |
+|---|---|
+| Prompt | `prompts/prompt-02-heterogeneous-scheduler.md` |
+| Request status | Completed, HTTP 200 |
+| Server log window | 14:12:41-14:16:51 |
+| Steady generation samples | 18 main-response samples after initial prompt processing and before tail/UI-layer activity |
+| Steady generation average | ~27.7 tok/s |
+| Steady generation range | 24.1-30.6 tok/s |
+| Prefix cache hit rate | 0.0% |
+| Speculative decoding | MTP, 2 speculative tokens |
+| Draft acceptance rate | Mostly ~50-80% during main response, with a later 95.7% tail sample |
+| Raw log | `raw-logs/2026-05-29-node-04-qwen36-heretic-prompt-02-scheduler.log` |
+| Response | `responses/node-04-kraken-4x3090/2026-05-29-qwen36-heretic-prompt-02-scheduler.md` |
+| Notes | The later 14:16:11 prompt-throughput spike may reflect OpenWebUI/UI-layer activity; it is not included in the main steady average. |
 
 ## Stability notes
 
 | Area | Result |
 |---|---|
 | Load stability | Stable profile observed in 0.94-0.95 range depending on run |
-| Inference stability | Prompt 1 completed successfully |
-| Post-response cleanup | KV cache returned to 0.0% and running requests returned to 0 in this log |
+| Inference stability | Prompts 1 and 2 completed successfully |
+| Post-response cleanup | KV cache returned to 0.0% and running requests returned to 0 in both recorded logs |
 | Manual intervention needed | None observed for this request |
 | Known bad params | `gpu_memory_utilization=0.96` produced CUDA OOM during sampler/warmup path |
 | Known stable params | Start from `gpu_memory_utilization=0.94`, then test upward |
 
 ## Prompt used
 
-Reference: `prompts/prompt-01-dijkstra-js.md`
+Primary recorded prompts:
+
+- `prompts/prompt-01-dijkstra-js.md`
+- `prompts/prompt-02-heterogeneous-scheduler.md`
+
+Prompt 1:
 
 ```text
 Write a JavaScript function that finds the shortest path in a weighted directed graph using Dijkstra's algorithm.
@@ -115,6 +138,29 @@ Requirements:
 - Prioritize correctness, clarity, and robustness.
 ```
 
+Prompt 2:
+
+```text
+Design an efficient strategy for scheduling jobs on a small compute cluster with heterogeneous machines.
+
+Scenario:
+- Some machines are fast but have limited memory.
+- Some machines are slower but have much larger memory.
+- Some jobs are short and latency-sensitive.
+- Some jobs are long and require large context or large models.
+- Only one model can run on a node at a time.
+
+Task:
+Propose an algorithm or decision framework for assigning jobs to nodes.
+
+Requirements:
+- Explain the strategy clearly.
+- Include the factors used in scheduling decisions.
+- Discuss tradeoffs and failure cases.
+- Provide simple pseudocode for the scheduler.
+- Be practical rather than theoretical.
+```
+
 ## Answer notes
 
 - The answer produced JavaScript, not TypeScript.
@@ -123,10 +169,11 @@ Requirements:
 - It handled unreachable target nodes in the documented return shape.
 - Caveat: the implementation assumes neighbor nodes are present in the adjacency list or are the target. A neighbor-only node that is not already initialized would not be relaxed correctly.
 - Caveat: negative edge weights are not rejected; Dijkstra requires non-negative weights.
+- Prompt 2 produced a practical greedy priority/affinity scheduler with factors, tradeoffs, failure cases, and pseudocode.
 
 ## Observations
 
 - Model architecture and MTP were recognized by vLLM.
 - 0.96 failure appears to be VRAM headroom, not model incompatibility.
-- Prompt 1 result was usable, but quality scoring remains deferred.
+- Prompt 1 and prompt 2 results were usable, but quality scoring remains deferred.
 - Post-response cleanup was clean in this run; continue tracking across longer runs.

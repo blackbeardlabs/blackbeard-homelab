@@ -24,6 +24,12 @@ This project uses `Unreleased` for changes made before a tagged public release.
   Area: benchmark data, raw log handling.
 - 2026-05-29: Added request method and sampling fields to benchmark docs, marked the Heretic Dijkstra run as an OpenWebUI interactive run, and corrected the non-Heretic BF16 entry to pending.
   Area: benchmark data, raw log handling, documentation.
+- 2026-05-29: Added response storage and recorded the Qwen3.6 Heretic BF16 Dijkstra benchmark response.
+  Area: response data, benchmark data, documentation.
+- 2026-05-29: Recorded the node-04 Kraken Qwen3.6 Heretic BF16 OpenWebUI benchmark run for `prompt-02-heterogeneous-scheduler`, including raw log excerpt, response, and observed GPU metrics.
+  Area: benchmark data, raw log handling, response data, prompt data.
+- 2026-05-29: Expanded agent guidance with the benchmark recording workflow for benchmark files, raw logs, responses, OpenWebUI sampling notes, and throughput summaries.
+  Area: documentation, benchmark data, raw log handling, response data.
 
 ### Removed
 

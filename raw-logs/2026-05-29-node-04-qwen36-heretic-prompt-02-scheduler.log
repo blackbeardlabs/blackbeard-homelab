@@ -1,0 +1,100 @@
+Benchmark raw log excerpt
+Date: 2026-05-29
+Node: node-04-v1 Kraken
+Model: llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved
+Prompt: prompts/prompt-02-heterogeneous-scheduler.md
+Backend: vLLM
+Backend version: 0.21.0
+Context: 260000
+Tensor parallel: 4
+Speculative decoding: MTP, 2 speculative tokens
+Request method: OpenWebUI
+Client: OpenWebUI container connected to vLLM OpenAI-compatible endpoint
+Sampling params: OpenWebUI defaults
+Temperature: Not explicitly captured
+Top-p: Not explicitly captured
+Top-k: Not explicitly captured
+Max tokens: Not explicitly captured
+Streaming: Not explicitly captured
+Request note: Exact OpenWebUI sampling settings were not captured; treat this as an observed interactive OpenWebUI run, not a fully controlled direct API run.
+
+Launch command:
+CUDA_VISIBLE_DEVICES=0,1,2,3 \
+vllm serve ~/models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved \
+  --served-model-name qwen36-27b-bf16-mtp-heretic-260k \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --tensor-parallel-size 4 \
+  --dtype bfloat16 \
+  --max-model-len 260000 \
+  --gpu-memory-utilization 0.94 \
+  --reasoning-parser qwen3 \
+  --language-model-only \
+  --speculative-config '{"method":"mtp","num_speculative_tokens":2}' \
+  --disable-custom-all-reduce
+
+Prompt:
+Design an efficient strategy for scheduling jobs on a small compute cluster with heterogeneous machines.
+
+Scenario:
+- Some machines are fast but have limited memory.
+- Some machines are slower but have much larger memory.
+- Some jobs are short and latency-sensitive.
+- Some jobs are long and require large context or large models.
+- Only one model can run on a node at a time.
+
+Task:
+Propose an algorithm or decision framework for assigning jobs to nodes.
+
+Requirements:
+- Explain the strategy clearly.
+- Include the factors used in scheduling decisions.
+- Discuss tradeoffs and failure cases.
+- Provide simple pseudocode for the scheduler.
+- Be practical rather than theoretical.
+
+Server log:
+(APIServer pid=373407) INFO 05-29 13:01:51 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO:     172.17.0.2:51186 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+(APIServer pid=373407) INFO 05-29 14:12:41 [loggers.py:271] Engine 000: Avg prompt throughput: 15.4 tokens/s, Avg generation throughput: 18.1 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.3%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:12:51 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 28.4 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.3%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:13:01 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 27.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:13:11 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 27.5 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:13:21 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 25.2 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.6%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:13:31 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 29.5 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.8%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:13:41 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 28.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.8%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:13:51 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 27.2 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.8%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:14:01 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 26.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.0%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:14:11 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 27.2 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.0%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:14:21 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 24.1 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.0%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:14:31 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 29.5 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.3%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:14:41 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 29.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.3%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:14:51 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 29.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.3%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:15:01 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 28.3 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.5%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:15:11 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 30.6 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.5%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:15:21 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 29.5 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.5%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:15:31 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 26.2 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.7%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:15:41 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 26.9 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.7%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:15:51 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 12.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 2.8%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:16:01 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.0%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:16:11 [loggers.py:271] Engine 000: Avg prompt throughput: 266.5 tokens/s, Avg generation throughput: 22.0 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.0%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:16:21 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 31.4 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.3%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:16:31 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 31.3 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 3.3%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO:     172.17.0.2:51186 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+(APIServer pid=373407) INFO 05-29 14:16:41 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 13.5 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+(APIServer pid=373407) INFO 05-29 14:16:51 [loggers.py:271] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%
+
+Observed nvidia-smi snapshot at 2026-05-29 14:14:00:
+Driver Version: 595.58.03
+CUDA Version: 13.2
+GPU 0: 23353MiB / 24576MiB, 96% util, 211W / 250W, 53C
+GPU 1: 23351MiB / 24576MiB, 100% util, 212W / 250W, 49C
+GPU 2: 23351MiB / 24576MiB, 100% util, 208W / 250W, 61C
+GPU 3: 23843MiB / 24576MiB, 100% util, 224W / 250W, 64C
+
+Derived summary:
+Main steady generation samples from 14:12:51 through 14:15:41 averaged about 27.7 tok/s.
+Main steady generation sample range: 24.1-30.6 tok/s.
+Peak reported GPU KV cache usage in this log excerpt: 3.7%.
+The 14:16:11 prompt-throughput spike may reflect OpenWebUI/UI-layer activity and is not included in the main steady average.
+Post-response cleanup returned Running to 0 and GPU KV cache usage to 0.0%.
