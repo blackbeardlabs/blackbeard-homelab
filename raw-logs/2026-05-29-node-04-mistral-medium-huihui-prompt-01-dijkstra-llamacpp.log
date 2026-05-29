@@ -1,0 +1,172 @@
+Benchmark raw log excerpt
+Date: 2026-05-29
+Node: node-04-v1 Kraken
+Model: huihui-ai/Huihui-Mistral-Medium-3.5-128B-BF16-abliterated-GGUF
+Model file: ~/models/huihui-ai/Huihui-Mistral-Medium-3.5-128B-BF16-abliterated-GGUF/Huihui-Mistral-Medium-3.5-128B-BF16-abliterated-Q4_K-00001-of-00008.gguf
+Quantization note: Loaded artifact is the quantized Q4_K GGUF shard; this is not a BF16 runtime benchmark.
+Prompt: prompts/prompt-01-dijkstra-js.md
+Backend: llama.cpp
+Backend version: 9414 (da3f990a4)
+Context setting: -c 80000; observed n_ctx = 80128
+Request method: OpenWebUI
+Client: OpenWebUI connected to llama.cpp OpenAI-compatible endpoint
+Sampling params: OpenWebUI defaults
+Temperature: Not explicitly captured
+Top-p: Not explicitly captured
+Top-k: Not explicitly captured
+Max tokens: Not explicitly captured
+Streaming: Not explicitly captured
+Request note: Exact OpenWebUI sampling settings were not captured; treat this as an observed interactive OpenWebUI run, not a fully controlled direct API run.
+
+Launch command:
+MODEL="$HOME/models/huihui-ai/Huihui-Mistral-Medium-3.5-128B-BF16-abliterated-GGUF/Huihui-Mistral-Medium-3.5-128B-BF16-abliterated-Q4_K-00001-of-00008.gguf"
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 ./build-cuda-20260529-da3f990a4/bin/llama-server \
+  -m "$MODEL" \
+  --alias mistral-medium-huihui-3.5 \
+  --host 0.0.0.0 \
+  --port 8080 \
+  -ngl 999 \
+  --split-mode layer \
+  --tensor-split 1,1,1,1 \
+  -c 80000 \
+  -b 2048 \
+  -ub 512 \
+  -np 1 \
+  -fa on \
+  --cache-type-k q8_0 \
+  --cache-type-v q8_0 \
+  --metrics
+
+Prompt:
+Write a JavaScript function that finds the shortest path in a weighted directed graph using Dijkstra's algorithm.
+
+Requirements:
+- Use JavaScript, not TypeScript.
+- Input should be an adjacency list.
+- Return both the total distance and the actual path.
+- Handle unreachable target nodes correctly.
+- Include a small example input and expected output.
+- Keep the explanation concise.
+- Prioritize correctness, clarity, and robustness.
+
+Backend identity:
+Backend dir: /home/blackbeard3/llm-backends/llama.cpp-main
+Remote: https://github.com/ggerganov/llama.cpp
+Branch: master
+Commit: da3f990a47ec8c25ff3d2154d3dea46ee3f4f334
+Last commit: da3f990a4 (HEAD -> master, origin/master, origin/HEAD) mtmd: Add DeepSeekOCR 2 Support (#20975)
+Git status: clean in captured output
+Build directory: build-cuda-20260529-da3f990a4
+Binaries:
+- build-cuda-20260529-da3f990a4/bin/llama-bench
+- build-cuda-20260529-da3f990a4/bin/llama-cli
+- build-cuda-20260529-da3f990a4/bin/llama-server
+
+Version output:
+llama-server:
+version: 9414 (da3f990a4)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-cli:
+version: 9414 (da3f990a4)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-bench:
+ggml_cuda_init: found 4 CUDA devices (Total VRAM: 96502 MiB):
+  Device 0: NVIDIA GeForce RTX 3090, compute capability 8.6, VMM: yes, VRAM: 24126 MiB
+  Device 1: NVIDIA GeForce RTX 3090, compute capability 8.6, VMM: yes, VRAM: 24126 MiB
+  Device 2: NVIDIA GeForce RTX 3090, compute capability 8.6, VMM: yes, VRAM: 24126 MiB
+  Device 3: NVIDIA GeForce RTX 3090, compute capability 8.6, VMM: yes, VRAM: 24124 MiB
+error: invalid parameter for argument: --version
+
+Selected CMake/build flags:
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CUDA_COMPILER:FILEPATH=/usr/local/cuda/bin/nvcc
+CUDAToolkit_BIN_DIR:PATH=/usr/local/cuda/bin
+CUDA_cublas_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcublas.so
+CUDA_cudart_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcudart.so
+GGML_CPU:BOOL=ON
+GGML_CUDA:BOOL=ON
+GGML_CUDA_COMPRESSION_MODE:STRING=size
+GGML_CUDA_FA:BOOL=ON
+GGML_CUDA_FA_ALL_QUANTS:BOOL=OFF
+GGML_CUDA_FORCE_CUBLAS:BOOL=OFF
+GGML_CUDA_FORCE_MMQ:BOOL=OFF
+GGML_CUDA_GRAPHS:BOOL=ON
+GGML_CUDA_NCCL:BOOL=ON
+GGML_CUDA_NO_PEER_COPY:BOOL=OFF
+GGML_CUDA_NO_VMM:BOOL=OFF
+GGML_CUDA_PEER_MAX_BATCH_SIZE:STRING=128
+GGML_LLAMAFILE:BOOL=ON
+GGML_METAL:BOOL=OFF
+
+Server log:
+0.00.514.168 I device_info:
+0.00.659.086 I   - CUDA0   : NVIDIA GeForce RTX 3090 (24126 MiB, 23847 MiB free)
+0.00.786.703 I   - CUDA1   : NVIDIA GeForce RTX 3090 (24126 MiB, 23847 MiB free)
+0.00.946.817 I   - CUDA2   : NVIDIA GeForce RTX 3090 (24126 MiB, 23847 MiB free)
+0.01.078.761 I   - CUDA3   : NVIDIA GeForce RTX 3090 (24124 MiB, 23515 MiB free)
+0.01.078.773 I   - CPU     : AMD Ryzen Threadripper 1950X 16-Core Processor (128801 MiB, 128801 MiB free)
+0.01.078.874 I system_info: n_threads = 16 (n_threads_batch = 16) / 32 | CUDA : ARCHS = 860 | USE_GRAPHS = 1 | PEER_MAX_BATCH_SIZE = 128 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 |
+0.01.080.403 I srv  llama_server: loading model
+0.01.080.409 I srv    load_model: loading model '/home/blackbeard3/models/huihui-ai/Huihui-Mistral-Medium-3.5-128B-BF16-abliterated-GGUF/Huihui-Mistral-Medium-3.5-128B-BF16-abliterated-Q4_K-00001-of-00008.gguf'
+0.01.566.777 W common_fit_params: failed to fit params to free device memory: n_gpu_layers already set by user to 999, abort
+1.39.052.427 W llama_context: n_ctx_seq (80128) < n_ctx_train (262144) -- the full capacity of the model will not be utilized
+1.39.415.407 I common_init_from_params: warming up the model with an empty run - please wait ... (--no-warmup to disable)
+1.39.750.013 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 80128
+1.39.750.123 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB
+1.39.764.927 I srv  llama_server: model loaded
+1.39.764.931 I srv  llama_server: server is listening on http://0.0.0.0:8080
+1.39.764.936 I srv  update_slots: all slots are idle
+8.10.622.857 I srv  params_from_: Chat format: peg-native
+8.10.623.314 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+8.21.752.836 I slot print_timing: id  0 | task 0 | n_decoded =    100, tg =  10.69 t/s
+8.24.790.084 I slot print_timing: id  0 | task 0 | n_decoded =    132, tg =  10.65 t/s
+8.27.819.203 I slot print_timing: id  0 | task 0 | n_decoded =    164, tg =  10.63 t/s
+8.30.842.771 I slot print_timing: id  0 | task 0 | n_decoded =    196, tg =  10.63 t/s
+8.33.859.315 I slot print_timing: id  0 | task 0 | n_decoded =    228, tg =  10.62 t/s
+8.36.884.943 I slot print_timing: id  0 | task 0 | n_decoded =    260, tg =  10.62 t/s
+8.39.908.182 I slot print_timing: id  0 | task 0 | n_decoded =    292, tg =  10.61 t/s
+8.42.936.414 I slot print_timing: id  0 | task 0 | n_decoded =    324, tg =  10.61 t/s
+8.45.973.594 I slot print_timing: id  0 | task 0 | n_decoded =    356, tg =  10.60 t/s
+8.49.002.801 I slot print_timing: id  0 | task 0 | n_decoded =    388, tg =  10.60 t/s
+8.52.037.052 I slot print_timing: id  0 | task 0 | n_decoded =    420, tg =  10.59 t/s
+8.55.074.020 I slot print_timing: id  0 | task 0 | n_decoded =    452, tg =  10.59 t/s
+8.58.103.569 I slot print_timing: id  0 | task 0 | n_decoded =    484, tg =  10.59 t/s
+9.01.138.775 I slot print_timing: id  0 | task 0 | n_decoded =    516, tg =  10.59 t/s
+9.04.173.040 I slot print_timing: id  0 | task 0 | n_decoded =    548, tg =  10.58 t/s
+9.07.220.184 I slot print_timing: id  0 | task 0 | n_decoded =    580, tg =  10.58 t/s
+9.10.258.651 I slot print_timing: id  0 | task 0 | n_decoded =    612, tg =  10.58 t/s
+9.13.297.322 I slot print_timing: id  0 | task 0 | n_decoded =    644, tg =  10.57 t/s
+9.16.366.567 I slot print_timing: id  0 | task 0 | n_decoded =    676, tg =  10.57 t/s
+9.19.418.161 I slot print_timing: id  0 | task 0 | n_decoded =    708, tg =  10.56 t/s
+9.22.474.044 I slot print_timing: id  0 | task 0 | n_decoded =    740, tg =  10.56 t/s
+9.25.539.628 I slot print_timing: id  0 | task 0 | n_decoded =    772, tg =  10.55 t/s
+9.26.779.153 I slot print_timing: id  0 | task 0 | prompt eval time =    1772.12 ms /   451 tokens (    3.93 ms per token,   254.50 tokens per second)
+9.26.779.157 I slot print_timing: id  0 | task 0 |        eval time =   74383.68 ms /   785 tokens (   94.76 ms per token,    10.55 tokens per second)
+9.26.779.158 I slot print_timing: id  0 | task 0 |       total time =   76155.80 ms /  1236 tokens
+9.26.787.175 I slot      release: id  0 | task 0 | stop processing: n_tokens = 1235, truncated = 0
+9.26.787.202 I srv  update_slots: all slots are idle
+9.26.901.260 W srv   prompt_save:  - saving prompt with length 1235, total state size = 225.548 MiB (draft: 0.000 MiB)
+9.27.209.476 I slot launch_slot_: id  0 | task 786 | processing task, is_child = 0
+9.31.021.710 I slot print_timing: id  0 | task 786 | prompt eval time =    2465.66 ms /  1166 tokens (    2.11 ms per token,   472.90 tokens per second)
+9.31.021.715 I slot print_timing: id  0 | task 786 |        eval time =    1346.54 ms /    15 tokens (   89.77 ms per token,    11.14 tokens per second)
+9.31.021.716 I slot print_timing: id  0 | task 786 |       total time =    3812.20 ms /  1181 tokens
+9.31.029.413 I slot      release: id  0 | task 786 | stop processing: n_tokens = 1542, truncated = 0
+9.31.029.427 I srv  update_slots: all slots are idle
+
+Observed nvidia-smi snapshot at 2026-05-29 19:18:48:
+Driver Version: 595.58.03
+CUDA Version: 13.2
+GPU 0: 23207MiB / 24576MiB, 31% util, 171W / 250W, 40C
+GPU 1: 21581MiB / 24576MiB, 22% util, 176W / 250W, 37C
+GPU 2: 21581MiB / 24576MiB, 22% util, 175W / 250W, 50C
+GPU 3: 23223MiB / 24576MiB, 30% util, 190W / 250W, 53C
+
+Derived summary:
+Main response prompt eval: 451 tokens at 254.50 tok/s.
+Main response generation: 785 tokens at 10.55 tok/s.
+Main response total: 76155.80 ms / 1236 tokens.
+GPU utilization in screenshot was low for a 4-GPU run, around 22-31%.
+Task 786 appears after prompt cache save and is treated as likely OpenWebUI/UI-layer activity, not the main benchmark response.

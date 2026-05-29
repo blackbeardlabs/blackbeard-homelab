@@ -16,6 +16,25 @@
 - llama.cpp multi-GPU scaling is uncertain and must be measured.
 - Compare directly against node-03 RTX 5090 plus DDR5 fallback behavior.
 
+## Backend build identity
+
+| Field | Value |
+|---|---|
+| Backend family | llama.cpp / GGUF |
+| Backend directory | Pending |
+| Backend repo / remote | Pending |
+| Branch | Pending |
+| Commit hash | Pending |
+| Last commit | Pending |
+| Git status | Pending |
+| Build directory | Pending |
+| Binary path | Pending |
+| Binary version output | Pending |
+| Runtime/library status | Pending |
+| Important build flags | Pending |
+| CUDA enabled | Pending |
+| Notes | StepFun's llama.cpp fork / `step3.7` branch may be required. |
+
 ## Notes
 
 - StepFun's llama.cpp fork / `step3.7` branch may be required.

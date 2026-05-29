@@ -26,6 +26,14 @@ When recording a benchmark run, update the related files together:
 - Model response in `responses/` when the output is useful for quality review. Preserve the response as observed and keep human notes separate.
 - `CHANGELOG.md` entry describing the benchmark, raw log, response, prompt, or documentation change.
 
+For controlled direct API runs:
+
+- Use manual copy-paste curl templates from `benchmarks/direct-api-curl.md`.
+- Run the request from the terminal on the node hosting the model server.
+- Record exact JSON sampling values; do not write `OpenWebUI defaults`.
+- Copy saved response JSON into `raw-logs/` when useful and capture backend/server logs separately.
+- Keep `max_tokens` bounded unless the benchmark explicitly needs long generation.
+
 For OpenWebUI runs:
 
 - Mark request method as `OpenWebUI`.
@@ -33,6 +41,13 @@ For OpenWebUI runs:
 - Write `Not explicitly captured` for missing temperature, top-p, top-k, max tokens, or streaming values.
 - Do not infer or invent missing sampling values.
 - Treat OpenWebUI title generation, follow-up generation, or other UI-layer backend activity as separate from the main response when summarizing throughput.
+
+For llama.cpp / GGUF runs:
+
+- Record the exact fork/build identity. Do not write only `llama.cpp`.
+- Include backend directory, git remote, branch, commit hash, last commit, git status, build directory, binary path, version output, runtime/library status, and important CMake flags.
+- Preserve failed version command output exactly, including shared library errors such as missing `libllama-common.so.0`.
+- If the benchmark succeeds despite a version command failure, explain how the working binary was launched.
 
 For throughput summaries:
 

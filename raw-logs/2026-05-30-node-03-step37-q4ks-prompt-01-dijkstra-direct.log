@@ -1,0 +1,183 @@
+Benchmark raw log excerpt
+Date: 2026-05-30
+Node: node-03-v1 RTX 5090
+Model: stepfun-ai/Step-3.7-Flash-GGUF
+Model file: /mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/stepfun-ai/Step-3.7-Flash-GGUF/Step-3.7-flash-Q4_K_S-00001-of-00003.gguf
+Quantization: Q4_K_S GGUF, sharded
+Prompt: prompts/prompt-01-dijkstra-js.md
+Backend: llama.cpp StepFun fork
+Backend version: 9355 (ae0dcaca9)
+Context setting: -c 32768
+Request method: Direct API / curl
+Client: manual curl request to localhost:8080 OpenAI-compatible endpoint
+Sampling params: explicit
+Temperature: 0.2
+Top-p: 0.95
+Top-k: Not set
+Max tokens: 5000
+Streaming: false
+Result: finish_reason=length; message.content empty; message.reasoning_content length-truncated
+
+Server launch command:
+MODEL="/mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/stepfun-ai/Step-3.7-Flash-GGUF/Step-3.7-flash-Q4_K_S-00001-of-00003.gguf"
+
+cd ~/llm-backends/llama.cpp-stepfun
+
+CUDA_VISIBLE_DEVICES=0 \
+LD_LIBRARY_PATH="$PWD/build-step37/bin:$PWD/build-step37/src:$PWD/build-step37/ggml/src" \
+./build-step37/bin/llama-server \
+  -m "$MODEL" \
+  --alias step37-flash-q4ks-5090 \
+  --host 0.0.0.0 \
+  --port 8080 \
+  -ngl 999 \
+  --n-cpu-moe 36 \
+  -c 32768 \
+  -b 2048 \
+  -ub 512 \
+  -np 1 \
+  -fa on \
+  --metrics
+
+Prompt preparation:
+cat > /tmp/prompt-dijkstra.txt <<'PROMPT'
+Write a JavaScript function that finds the shortest path in a weighted directed graph using Dijkstra's algorithm.
+
+Requirements:
+- Use JavaScript, not TypeScript.
+- Input should be an adjacency list.
+- Return both the total distance and the actual path.
+- Handle unreachable target nodes correctly.
+- Include a small example input and expected output.
+- Keep the explanation concise.
+- Prioritize correctness, clarity, and robustness.
+PROMPT
+
+Request payload generation:
+python3 - <<'PY' > /tmp/request-dijkstra.json
+import json
+
+with open("/tmp/prompt-dijkstra.txt", "r", encoding="utf-8") as f:
+    prompt = f.read()
+
+payload = {
+    "model": "step37-flash-q4ks-5090",
+    "messages": [
+        {"role": "user", "content": prompt}
+    ],
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "max_tokens": 5000,
+    "stream": False
+}
+
+print(json.dumps(payload, ensure_ascii=False, indent=2))
+PY
+
+Request command:
+curl http://localhost:8080/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d @/tmp/request-dijkstra.json \
+  | tee ~/blackbeard-bench-runs/step37-q4ks-5090-prompt01-dijkstra-response.json
+
+Backend identity:
+Backend dir: /home/blackbeard/llm-backends/llama.cpp-stepfun
+Remote: https://github.com/stepfun-ai/llama.cpp.git
+Branch: step3.7
+Commit: ae0dcaca9f34babc6ab09c04d541844b1ddb45fb
+Last commit: ae0dcaca9 (HEAD -> step3.7, origin/step3.7) delete fromjson
+Git status: clean in captured output
+Build directory: build-step37
+Binaries:
+- build-step37/bin/llama-cli
+- build-step37/bin/llama-bench
+- build-step37/bin/llama-server
+
+Version output:
+llama-server:
+version: 9355 (ae0dcaca9)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-cli:
+version: 9355 (ae0dcaca9)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-bench:
+ggml_cuda_init: found 1 CUDA devices (Total VRAM: 32110 MiB):
+  Device 0: NVIDIA GeForce RTX 5090, compute capability 12.0, VMM: yes, VRAM: 32110 MiB
+error: invalid parameter for argument: --version
+
+Selected CMake/build flags:
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CUDA_COMPILER:FILEPATH=/usr/local/cuda-13.2/bin/nvcc
+CUDAToolkit_BIN_DIR:PATH=/usr/local/cuda-13.2/bin
+CUDA_cublas_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcublas.so
+CUDA_cudart_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcudart.so
+GGML_CPU:BOOL=ON
+GGML_CUDA:BOOL=ON
+GGML_CUDA_COMPRESSION_MODE:STRING=size
+GGML_CUDA_FA:BOOL=ON
+GGML_CUDA_FA_ALL_QUANTS:BOOL=OFF
+GGML_CUDA_FORCE_CUBLAS:BOOL=OFF
+GGML_CUDA_FORCE_MMQ:BOOL=OFF
+GGML_CUDA_GRAPHS:BOOL=ON
+GGML_CUDA_NCCL:BOOL=ON
+GGML_CUDA_NO_PEER_COPY:BOOL=OFF
+GGML_CUDA_NO_VMM:BOOL=OFF
+GGML_CUDA_PEER_MAX_BATCH_SIZE:STRING=128
+GGML_LLAMAFILE:BOOL=ON
+GGML_METAL:BOOL=OFF
+
+Server log excerpt:
+67.37.761.056 I srv  params_from_: Chat format: peg-native
+67.37.761.735 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 1.000 (> 0.100 thold), f_keep = 0.009
+67.37.761.739 I srv  get_availabl: updating prompt cache
+67.37.762.076 W srv   prompt_save:  - saving prompt with length 10094, total state size = 605.285 MiB (draft: 0.000 MiB)
+67.37.911.963 I srv        update:  - cache state: 6 prompts, 2973.165 MiB (limits: 8192.000 MiB, 32768 tokens, 85224 est)
+67.37.912.331 I slot launch_slot_: id  0 | task 26529 | processing task, is_child = 0
+67.37.912.886 W slot update_slots: id  0 | task 26529 | restored context checkpoint (pos_min = 0, pos_max = 0, n_tokens = 1, n_past = 1, size = 0.130 MiB)
+67.44.895.073 I slot print_timing: id  0 | task 26529 | n_decoded =    100, tg =  21.31 t/s
+68.03.001.421 I slot print_timing: id  0 | task 26529 | n_decoded =    474, tg =  20.79 t/s
+68.30.196.281 I slot print_timing: id  0 | task 26529 | n_decoded =   1044, tg =  20.88 t/s
+69.00.336.735 I slot print_timing: id  0 | task 26529 | n_decoded =   1676, tg =  20.91 t/s
+69.30.461.227 I slot print_timing: id  0 | task 26529 | n_decoded =   2306, tg =  20.91 t/s
+70.03.614.452 I slot print_timing: id  0 | task 26529 | n_decoded =   3000, tg =  20.92 t/s
+70.33.743.423 I slot print_timing: id  0 | task 26529 | n_decoded =   3630, tg =  20.92 t/s
+71.03.877.732 I slot print_timing: id  0 | task 26529 | n_decoded =   4261, tg =  20.92 t/s
+71.37.031.410 I slot print_timing: id  0 | task 26529 | n_decoded =   4954, tg =  20.92 t/s
+71.39.233.663 I slot print_timing: id  0 | task 26529 | prompt eval time =    2289.69 ms /    94 tokens (   24.36 ms per token,    41.05 tokens per second)
+71.39.233.666 I slot print_timing: id  0 | task 26529 |        eval time =  239031.62 ms /  5000 tokens (   47.81 ms per token,    20.92 tokens per second)
+71.39.233.667 I slot print_timing: id  0 | task 26529 |       total time =  241321.31 ms /  5094 tokens
+71.39.233.668 I slot print_timing: id  0 | task 26529 |    graphs reused =      31378
+71.39.233.694 I slot      release: id  0 | task 26529 | stop processing: n_tokens = 5094, truncated = 0
+71.39.233.719 I srv  update_slots: all slots are idle
+
+Response metadata:
+finish_reason: length
+created: 1780089237
+model: step37-flash-q4ks-5090
+system_fingerprint: b9355-ae0dcaca9
+object: chat.completion
+completion_tokens: 5000
+prompt_tokens: 95
+total_tokens: 5095
+cached_tokens: 1
+cache_n: 1
+prompt_n: 94
+prompt_ms: 2289.692
+prompt_per_second: 41.05355654821697
+predicted_n: 5000
+predicted_ms: 239031.618
+predicted_per_second: 20.91773482452016
+
+Observed nvidia-smi snapshot at 2026-05-30 00:12:25:
+Driver Version: 595.58.03
+CUDA Version: 13.2
+GPU 0: RTX 5090, 29047MiB / 32607MiB, 12% util, 103W / 500W, 39C
+
+Derived summary:
+Prompt eval: 94 tokens at 41.05 tok/s, cache/checkpoint affected.
+Generation: 5000 tokens at 20.92 tok/s.
+Total: 241321.31 ms / 5094 tokens.
+The response ended because it reached max_tokens=5000, not because the model completed the answer.
+message.content was empty; output text was in message.reasoning_content.

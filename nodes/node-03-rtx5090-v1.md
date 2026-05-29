@@ -7,8 +7,9 @@
 | Node | node-03-v1 |
 | Role | Fast single-GPU / experimental node |
 | CPU | Ryzen 9 9950X3D |
-| RAM | 256GB DDR5 |
+| RAM | 256GB DDR5-5600 |
 | GPU | RTX 5090 32GB |
+| GPU power limit | 500W |
 | Motherboard | Gigabyte AI TOP B850 |
 
 ## Notes

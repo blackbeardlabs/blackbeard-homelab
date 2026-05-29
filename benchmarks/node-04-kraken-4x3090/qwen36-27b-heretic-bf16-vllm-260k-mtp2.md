@@ -21,8 +21,9 @@
 | Component | Value |
 |---|---|
 | CPU | Threadripper 1950X |
-| RAM | 128GB DDR4 |
+| RAM | 128GB DDR4-3200 |
 | GPU | 4x RTX 3090 24GB |
+| GPU power limit | 250W per GPU |
 | Driver | 595.58.03 observed via `nvidia-smi` screenshot |
 | CUDA | 13.2 observed via `nvidia-smi` screenshot |
 | OS | Linux Mint 22.3 Zena |

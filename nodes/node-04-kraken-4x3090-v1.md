@@ -8,8 +8,9 @@
 | Codename | Kraken |
 | Role | Multi-GPU deep-context inference node |
 | CPU | Threadripper 1950X |
-| RAM | 128GB DDR4 |
+| RAM | 128GB DDR4-3200 |
 | GPU | 4x RTX 3090 24GB |
+| GPU power limit | 250W per GPU |
 | Motherboard | Gigabyte X399 Designare EX |
 | PCIe | PCIe 3.0 x16/x8/x16/x8 observed |
 | Cooling | Open-frame / multi-GPU rig |
