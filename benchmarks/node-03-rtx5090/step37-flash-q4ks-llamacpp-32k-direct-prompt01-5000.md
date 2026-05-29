@@ -27,7 +27,7 @@
 | GPU power limit | 500W |
 | Driver | 595.58.03 observed via `nvidia-smi` screenshot |
 | CUDA | 13.2 observed via `nvidia-smi` screenshot |
-| OS | Linux, exact distro not captured |
+| OS | Linux Mint 22.3 Zena |
 
 ## Launch command
 

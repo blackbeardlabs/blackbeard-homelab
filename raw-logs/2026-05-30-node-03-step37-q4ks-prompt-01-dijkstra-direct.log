@@ -1,6 +1,7 @@
 Benchmark raw log excerpt
 Date: 2026-05-30
 Node: node-03-v1 RTX 5090
+OS: Linux Mint 22.3 Zena
 Model: stepfun-ai/Step-3.7-Flash-GGUF
 Model file: /mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/stepfun-ai/Step-3.7-Flash-GGUF/Step-3.7-flash-Q4_K_S-00001-of-00003.gguf
 Quantization: Q4_K_S GGUF, sharded

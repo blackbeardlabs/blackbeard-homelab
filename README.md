@@ -4,6 +4,10 @@ Local LLM inference benchmarks on real mixed hardware.
 
 This repository tracks practical local inference behavior across home-lab nodes. It is a lab notebook, not a leaderboard claim set.
 
+## Lab defaults
+
+Unless otherwise noted in a specific benchmark or node file, Linux machines in this lab run `Linux Mint 22.3 Zena`.
+
 ## Node overview
 
 | Node id | Role | CPU | RAM | GPU | Current best-known/default model | Notes |

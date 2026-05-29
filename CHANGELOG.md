@@ -6,10 +6,28 @@ This project uses `Unreleased` for changes made before a tagged public release.
 
 ## Unreleased
 
-
-
 ### Added
 
+- 2026-05-30: Added a lab default note that Linux nodes currently use `Linux Mint 22.3 Zena`.
+  Area: documentation, node inventory, benchmark data.
+- 2026-05-30: Updated node-03 benchmark OS metadata to `Linux Mint 22.3 Zena`.
+  Area: benchmark data, raw log handling, documentation.
+- 2026-05-30: Recorded the node-03 RTX 5090 Step-3.7 Flash Q4_K_S llama.cpp direct-curl benchmark for `prompt-01-dijkstra-js`, including backend identity, raw log, response metadata, and length-truncated reasoning-only behavior.
+  Area: benchmark data, raw log handling, response data, documentation.
+- 2026-05-30: Updated direct curl templates to use `curl -sS` and explicitly warn that the response output directory must exist before using `tee`.
+  Area: documentation, raw log handling.
+- 2026-05-29: Added verified RAM speed notes for node-03 (`DDR5-5600`) and node-04 Kraken (`DDR4-3200`).
+  Area: node inventory, benchmark data, documentation.
+- 2026-05-29: Added llama.cpp backend build identity guidance, GGUF placeholder identity sections, and a compact backend identity example log.
+  Area: documentation, benchmark data, raw log handling.
+- 2026-05-29: Added GPU power limit notes for node-03 RTX 5090 (`500W`) and node-04 Kraken (`250W per RTX 3090`).
+  Area: node inventory, benchmark data, documentation.
+- 2026-05-29: Recorded the node-04 Kraken llama.cpp OpenWebUI benchmark for Mistral Medium 3.5 128B Huihui Q4_K on `prompt-01-dijkstra-js`, including backend identity, raw log, response, and low GPU utilization note.
+  Area: benchmark data, raw log handling, response data, documentation.
+- 2026-05-29: Clarified that the Mistral Medium Huihui llama.cpp benchmark used the quantized `Q4_K` GGUF shard, not BF16 runtime precision.
+  Area: benchmark data, raw log handling, response data, documentation.
+- 2026-05-29: Added direct API/curl copy-paste benchmark templates, template fields, and documentation for explicit sampling payloads on model-server nodes.
+  Area: documentation, benchmark data, raw log handling.
 - 2026-05-29: Created initial Markdown repository structure for Blackbeard Labs.
   Area: documentation, node inventory, benchmark notebook, prompt data, raw log handling.
 - 2026-05-29: Added `.gitignore` for editor files, local secrets, temporary files, logs, Python caches, and local model caches.
@@ -32,22 +50,6 @@ This project uses `Unreleased` for changes made before a tagged public release.
   Area: benchmark data, raw log handling, response data, prompt data.
 - 2026-05-29: Expanded agent guidance with the benchmark recording workflow for benchmark files, raw logs, responses, OpenWebUI sampling notes, and throughput summaries.
   Area: documentation, benchmark data, raw log handling, response data.
-  - 2026-05-30: Recorded the node-03 RTX 5090 Step-3.7 Flash Q4_K_S llama.cpp direct-curl benchmark for `prompt-01-dijkstra-js`, including backend identity, raw log, response metadata, and length-truncated reasoning-only behavior.
-  Area: benchmark data, raw log handling, response data, documentation.
-- 2026-05-30: Updated direct curl templates to use `curl -sS` and explicitly warn that the response output directory must exist before using `tee`.
-  Area: documentation, raw log handling.
-- 2026-05-29: Added verified RAM speed notes for node-03 (`DDR5-5600`) and node-04 Kraken (`DDR4-3200`).
-  Area: node inventory, benchmark data, documentation.
-- 2026-05-29: Added llama.cpp backend build identity guidance, GGUF placeholder identity sections, and a compact backend identity example log.
-  Area: documentation, benchmark data, raw log handling.
-- 2026-05-29: Added GPU power limit notes for node-03 RTX 5090 (`500W`) and node-04 Kraken (`250W per RTX 3090`).
-  Area: node inventory, benchmark data, documentation.
-- 2026-05-29: Recorded the node-04 Kraken llama.cpp OpenWebUI benchmark for Mistral Medium 3.5 128B Huihui Q4_K on `prompt-01-dijkstra-js`, including backend identity, raw log, response, and low GPU utilization note.
-  Area: benchmark data, raw log handling, response data, documentation.
-- 2026-05-29: Clarified that the Mistral Medium Huihui llama.cpp benchmark used the quantized `Q4_K` GGUF shard, not BF16 runtime precision.
-  Area: benchmark data, raw log handling, response data, documentation.
-- 2026-05-29: Added direct API/curl copy-paste benchmark templates, template fields, and documentation for explicit sampling payloads on model-server nodes.
-  Area: documentation, benchmark data, raw log handling.
 
 ### Removed
 

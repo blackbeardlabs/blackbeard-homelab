@@ -17,6 +17,11 @@ Repository guidance for AI agents and automation working on Blackbeard Labs.
 - Record exact commands when adding benchmark entries.
 - Do not commit secrets, tokens, private hostnames, or credentials.
 
+## Lab defaults
+
+- Unless a benchmark or node file says otherwise, assume Linux machines in this lab run `Linux Mint 22.3 Zena`.
+- Still record exact OS output when it is captured for a specific benchmark.
+
 ## Benchmark workflow
 
 When recording a benchmark run, update the related files together:
