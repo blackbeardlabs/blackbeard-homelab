@@ -107,8 +107,8 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 ./build-cuda-20260529-da3f990a4/bin/llama-server \
 | Main response timing | Prompt eval 451 tokens at 254.50 tok/s; generation 785 tokens at 10.55 tok/s |
 | Server log window | Main response from task 0; follow-up task 786 appears after prompt cache save |
 | Prefix/prompt cache | Prompt cache enabled, size limit 8192 MiB |
-| Raw log | `raw-logs/2026-05-29-node-04-mistral-medium-huihui-prompt-01-dijkstra-llamacpp.log` |
-| Response | `responses/node-04-kraken-4x3090/2026-05-29-mistral-medium-huihui-prompt-01-dijkstra.md` |
+| Raw log | `raw-logs/2026-05-29-node-04-huihui-mistral-medium-35-128b-q4k-prompt-01-dijkstra-llamacpp.log` |
+| Response | `responses/node-04-kraken-4x3090/2026-05-29-huihui-mistral-medium-35-128b-q4k-prompt-01-dijkstra.md` |
 | Notes | Low GPU utilization suggests a bottleneck or llama.cpp multi-GPU scaling issue in this configuration. |
 
 ## Stability notes

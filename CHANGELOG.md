@@ -8,6 +8,20 @@ This project uses `Unreleased` for changes made before a tagged public release.
 
 ### Added
 
+- 2026-05-30: Added benchmark guidance requiring official-vs-finetune model identity and finetune owner/source labels in benchmark metadata and filenames when applicable.
+  Area: documentation, benchmark data.
+- 2026-05-30: Renamed node-04 benchmark, raw-log, and response files to include model source / finetune owner prefixes: `llmfan46` for Heretic Qwen, `huihui` for Mistral Medium, and `qwen-official` for the upstream Qwen BF16 placeholder.
+  Area: benchmark data, raw log handling, response data, documentation.
+- 2026-05-30: Renamed new node-03 benchmark, raw-log, and response files to include model source / finetune owner prefixes such as `unsloth`, `lmstudio-community`, and `llmfan46`.
+  Area: benchmark data, raw log handling, response data, documentation.
+- 2026-05-30: Replaced the node-03 Qwen3.6 NVFP4 placeholder with a recorded llama.cpp direct-curl `draft-mtp` benchmark for `prompt-01-dijkstra-js`, including cold-cache timing, raw log, response notes, and length-truncated reasoning-only caveat.
+  Area: benchmark data, raw log handling, response data, documentation.
+- 2026-05-30: Recorded the node-03 RTX 5090 MiniMax M2.7 Q6_K llama.cpp direct-curl benchmark for `prompt-01-dijkstra-js`, including backend identity, raw log, response, and output caveats.
+  Area: benchmark data, raw log handling, response data, documentation.
+- 2026-05-30: Added node-01 RAM speed (`DDR4-2733`) and motherboard (`MSI A520M-A PRO`) metadata.
+  Area: node inventory, documentation.
+- 2026-05-30: Recorded the node-03 RTX 5090 MiMo V2.5 MXFP4_MOE llama.cpp direct-curl benchmark for `prompt-01-dijkstra-js`, including backend identity, raw log, response, and completed-output correctness note.
+  Area: benchmark data, raw log handling, response data, documentation.
 - 2026-05-30: Added a lab default note that Linux nodes currently use `Linux Mint 22.3 Zena`.
   Area: documentation, node inventory, benchmark data.
 - 2026-05-30: Updated node-03 benchmark OS metadata to `Linux Mint 22.3 Zena`.

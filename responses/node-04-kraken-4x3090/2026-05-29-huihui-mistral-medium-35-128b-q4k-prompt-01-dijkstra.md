@@ -11,8 +11,8 @@
 | Prompt id | `prompts/prompt-01-dijkstra-js.md` |
 | Request method | OpenWebUI |
 | Sampling params | OpenWebUI defaults; exact sampling parameters not explicitly captured |
-| Benchmark | `benchmarks/node-04-kraken-4x3090/mistral-medium-35-128b-huihui-q4k-llamacpp-80k-openwebui.md` |
-| Raw log | `raw-logs/2026-05-29-node-04-mistral-medium-huihui-prompt-01-dijkstra-llamacpp.log` |
+| Benchmark | `benchmarks/node-04-kraken-4x3090/huihui-mistral-medium-35-128b-q4k-llamacpp-80k-openwebui.md` |
+| Raw log | `raw-logs/2026-05-29-node-04-huihui-mistral-medium-35-128b-q4k-prompt-01-dijkstra-llamacpp.log` |
 
 Loaded artifact note: the local directory/file name includes `BF16`, but the benchmark used the quantized `Q4_K` GGUF shard.
 

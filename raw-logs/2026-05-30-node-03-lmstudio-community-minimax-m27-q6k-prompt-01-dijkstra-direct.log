@@ -1,0 +1,201 @@
+Benchmark raw log excerpt
+Date: 2026-05-30
+Node: node-03-v1 RTX 5090
+OS: Linux Mint 22.3 Zena
+Model: lmstudio-community/MiniMax-M2.7-GGUF
+Model file: /mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/lmstudio-community/MiniMax-M2.7-GGUF/MiniMax-M2.7-Q6_K-00001-of-00005.gguf
+Quantization: Q6_K GGUF, sharded
+Prompt: prompts/prompt-01-dijkstra-js.md
+Backend: llama.cpp mainline
+Backend version: 9413 (6ed481eea)
+Context setting: -c 100000; observed n_ctx = 100096
+Request method: Direct API / curl
+Client: manual curl request to localhost:8083 OpenAI-compatible endpoint
+Sampling params: explicit
+Temperature: 0.2
+Top-p: 0.95
+Top-k: Not set
+Max tokens: 2500
+Streaming: false
+Result: finish_reason=stop; completed response
+
+Server launch command:
+cd ~/llm-backends/llama.cpp-main
+
+MINIMAX="/mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/lmstudio-community/MiniMax-M2.7-GGUF/MiniMax-M2.7-Q6_K-00001-of-00005.gguf"
+
+CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=8 GOMP_CPU_AFFINITY="0 2 4 6 8 10 12 14" ./build-cuda-20260529/bin/llama-server -m "$MINIMAX" \
+  -ngl 999 \
+  --n-cpu-moe 58 \
+  --no-mmap \
+  -c 100000 \
+  -ctk q8_0 -ctv q8_0 \
+  -fa on \
+  --main-gpu 0 \
+  -t 8 --prio 3 \
+  --host 0.0.0.0 --port 8083
+
+Prompt preparation:
+cat > /tmp/prompt-dijkstra.txt <<'PROMPT'
+Write a JavaScript function that finds the shortest path in a weighted directed graph using Dijkstra's algorithm.
+
+Requirements:
+- Use JavaScript, not TypeScript.
+- Input should be an adjacency list.
+- Return both the total distance and the actual path.
+- Handle unreachable target nodes correctly.
+- Include a small example input and expected output.
+- Keep the explanation concise.
+- Prioritize correctness, clarity, and robustness.
+PROMPT
+
+Request payload generation:
+python3 - <<'PY' > /tmp/request-dijkstra.json
+import json
+
+with open("/tmp/prompt-dijkstra.txt", "r", encoding="utf-8") as f:
+    prompt = f.read()
+
+payload = {
+    "model": "MiniMax-M2.7-Q6_K-5090",
+    "messages": [
+        {"role": "user", "content": prompt}
+    ],
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "max_tokens": 2500,
+    "stream": False
+}
+
+print(json.dumps(payload, ensure_ascii=False, indent=2))
+PY
+
+Request command:
+curl http://localhost:8083/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d @/tmp/request-dijkstra.json \
+  | tee ~/blackbeard-bench-runs/MiniMax-M2.7-Q6_K-5090-prompt01-dijkstra-response.json
+
+Saved response file on node:
+~/blackbeard-bench-runs/MiniMax-M2.7-Q6_K-5090-prompt01-dijkstra-response.json
+Size: 9.5K observed from `ls -lh`.
+
+Backend identity:
+Backend dir: /home/blackbeard/llm-backends/llama.cpp-main
+Remote: https://github.com/ggml-org/llama.cpp
+Branch: master
+Commit: 6ed481eea4cf4ed40777db2fa29e8d08eb712b3b
+Last commit: 6ed481eea (HEAD -> master, origin/master, origin/HEAD) CUDA: Check PTX version on host side to guard PDL dispatch (#23530)
+Git status: clean in captured output
+Build directory: build-cuda-20260529
+Binaries:
+- build-cuda-20260529/bin/llama-cli
+- build-cuda-20260529/bin/llama-bench
+- build-cuda-20260529/bin/llama-server
+
+Version output:
+llama-server:
+version: 9413 (6ed481eea)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-cli:
+version: 9413 (6ed481eea)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-bench:
+ggml_cuda_init: found 1 CUDA devices (Total VRAM: 32110 MiB):
+  Device 0: NVIDIA GeForce RTX 5090, compute capability 12.0, VMM: yes, VRAM: 32110 MiB
+error: invalid parameter for argument: --version
+
+Selected CMake/build flags:
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CUDA_COMPILER:FILEPATH=/usr/local/cuda-13.2/bin/nvcc
+CUDAToolkit_BIN_DIR:PATH=/usr/local/cuda-13.2/bin
+CUDA_cublas_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcublas.so
+CUDA_cudart_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcudart.so
+GGML_CPU:BOOL=ON
+GGML_CUDA:BOOL=ON
+GGML_CUDA_COMPRESSION_MODE:STRING=size
+GGML_CUDA_FA:BOOL=ON
+GGML_CUDA_FA_ALL_QUANTS:BOOL=OFF
+GGML_CUDA_FORCE_CUBLAS:BOOL=OFF
+GGML_CUDA_FORCE_MMQ:BOOL=OFF
+GGML_CUDA_GRAPHS:BOOL=ON
+GGML_CUDA_NCCL:BOOL=ON
+GGML_CUDA_NO_PEER_COPY:BOOL=OFF
+GGML_CUDA_NO_VMM:BOOL=OFF
+GGML_CUDA_PEER_MAX_BATCH_SIZE:STRING=128
+GGML_LLAMAFILE:BOOL=ON
+GGML_METAL:BOOL=OFF
+
+Server startup excerpt:
+0.00.141.496 I log_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.205.454 I   - CUDA0   : NVIDIA GeForce RTX 5090 (32110 MiB, 31590 MiB free)
+0.00.205.472 I   - CPU     : AMD Ryzen 9 9950X3D 16-Core Processor (255324 MiB, 255324 MiB free)
+0.00.205.537 I system_info: n_threads = 8 (n_threads_batch = 8) / 32 | CUDA : ARCHS = 1200 | USE_GRAPHS = 1 | PEER_MAX_BATCH_SIZE = 128 | BLACKWELL_NATIVE_FP4 = 1 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | AVX512 = 1 | AVX512_VBMI = 1 | AVX512_VNNI = 1 | AVX512_BF16 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 |
+0.00.205.556 I srv  llama_server: n_parallel is set to auto, using n_parallel = 4 and kv_unified = true
+0.00.206.832 I srv    load_model: loading model '/mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/lmstudio-community/MiniMax-M2.7-GGUF/MiniMax-M2.7-Q6_K-00001-of-00005.gguf'
+0.00.563.055 W load: special_eos_id is not in special_eog_ids - the tokenizer config may be incorrect
+13.22.575.549 W llama_context: n_ctx_seq (100096) < n_ctx_train (196608) -- the full capacity of the model will not be utilized
+13.25.518.598 I srv    load_model: initializing slots, n_slots = 4
+13.28.416.218 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 100096
+13.28.416.229 I slot   load_model: id  1 | task -1 | new slot, n_ctx = 100096
+13.28.416.234 I slot   load_model: id  2 | task -1 | new slot, n_ctx = 100096
+13.28.416.239 I slot   load_model: id  3 | task -1 | new slot, n_ctx = 100096
+13.28.416.287 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB
+13.28.416.301 I srv    load_model: context checkpoints enabled, max = 32, min spacing = 256
+13.28.417.940 W render_message_to_json: Neither string content nor typed content is supported by the template. This is unexpected and may lead to issues.
+13.28.424.460 I init: chat template, example_format: ']~!b[]~b]system ...'
+13.28.430.551 I srv          init: init: chat template, thinking = 1
+13.28.430.600 I srv  llama_server: model loaded
+13.28.430.610 I srv  llama_server: server is listening on http://0.0.0.0:8083
+13.28.430.622 I srv  update_slots: all slots are idle
+
+Server request/timing excerpt:
+18.10.597.635 W render_message_to_json: Neither string content nor typed content is supported by the template. This is unexpected and may lead to issues.
+18.10.608.032 I srv  params_from_: Chat format: peg-native
+18.10.610.470 I slot get_availabl: id  3 | task -1 | selected slot by LRU, t_last = -1
+18.10.610.498 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 100096 tokens, 8589934592 est)
+18.10.611.190 I slot launch_slot_: id  3 | task 0 | processing task, is_child = 0
+18.23.737.174 I slot print_timing: id  3 | task 0 | n_decoded =    100, tg =  10.22 t/s
+18.54.226.749 I slot print_timing: id  3 | task 0 | n_decoded =    410, tg =  10.18 t/s
+19.24.706.835 I slot print_timing: id  3 | task 0 | n_decoded =    720, tg =  10.18 t/s
+19.55.309.976 I slot print_timing: id  3 | task 0 | n_decoded =   1030, tg =  10.16 t/s
+20.25.866.162 I slot print_timing: id  3 | task 0 | n_decoded =   1340, tg =  10.16 t/s
+20.56.417.242 I slot print_timing: id  3 | task 0 | n_decoded =   1650, tg =  10.16 t/s
+21.27.030.430 I slot print_timing: id  3 | task 0 | n_decoded =   1960, tg =  10.15 t/s
+21.51.329.758 I slot print_timing: id  3 | task 0 | prompt eval time =    3338.26 ms /   122 tokens (   27.36 ms per token,    36.55 tokens per second)
+21.51.329.783 I slot print_timing: id  3 | task 0 |        eval time =  217380.27 ms /  2206 tokens (   98.54 ms per token,    10.15 tokens per second)
+21.51.329.788 I slot print_timing: id  3 | task 0 |       total time =  220718.54 ms /  2328 tokens
+21.51.329.797 I slot print_timing: id  3 | task 0 |    graphs reused =       2196
+21.51.330.128 I slot      release: id  3 | task 0 | stop processing: n_tokens = 2327, truncated = 0
+21.51.330.147 I srv  update_slots: all slots are idle
+
+Response metadata:
+finish_reason: stop
+created: 1780145897
+requested model string: MiniMax-M2.7-Q6_K-5090
+returned model string: MiniMax-M2.7-Q6_K-00001-of-00005.gguf
+system_fingerprint: b9413-6ed481eea
+object: chat.completion
+completion_tokens: 2206
+prompt_tokens: 122
+total_tokens: 2328
+cached_tokens: 0
+cache_n: 0
+prompt_n: 122
+prompt_ms: 3338.263
+prompt_per_second: 36.54595219130428
+predicted_n: 2206
+predicted_ms: 217380.275
+predicted_per_second: 10.148114864607656
+
+Observed screenshots:
+2026-05-30 15:52:09: RTX 5090, 29089MiB / 32607MiB, 0% util, 9W / 500W, 34C. System Monitor showed about 170.2GiB / 249.3GiB memory and 769MiB / 2.0GiB swap.
+2026-05-30 15:55:30: RTX 5090, 29165MiB / 32607MiB, 5% util, 79W / 500W, 39C. System Monitor showed about 170.5GiB / 249.3GiB memory and 768.8MiB / 2.0GiB swap, with selected CPU cores pegged.
+
+Derived summary:
+Prompt eval: 122 tokens at 36.55 tok/s, cached_tokens=0.
+Generation: 2206 tokens at 10.15 tok/s.
+Total: 220718.54 ms / 2328 tokens.
+The response completed naturally with finish_reason=stop.

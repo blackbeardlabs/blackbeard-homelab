@@ -1,0 +1,208 @@
+Benchmark raw log excerpt
+Date: 2026-05-30
+Node: node-03-v1 RTX 5090
+OS: Linux Mint 22.3 Zena
+Model: llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-GGUF
+Model file: /mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-GGUF/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0.gguf
+Quantization: NVFP4 GGUF, MLP-only Q8_0 file, MTP preserved
+Prompt: prompts/prompt-01-dijkstra-js.md
+Backend: llama.cpp mainline
+Backend version: 9413 (6ed481eea)
+Context setting: -c 150000; observed n_ctx = 150016
+Request method: Direct API / curl
+Client: manual curl request to localhost:8083 OpenAI-compatible endpoint
+Sampling params: explicit
+Temperature: 0.2
+Top-p: 0.95
+Top-k: Not set
+Max tokens: 2500
+Streaming: false
+Result: finish_reason=length; reasoning-only truncated output
+
+Server launch command:
+MODEL="/mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-GGUF/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0.gguf"
+
+cd ~/llm-backends/llama.cpp-main
+
+CUDA_VISIBLE_DEVICES=0 ./build-cuda-20260529/bin/llama-server \
+  -m "$MODEL" \
+  -ngl 999 \
+  -c 150000 \
+  -np 1 \
+  -fa on \
+  --spec-type draft-mtp \
+  --spec-draft-n-max 3 \
+  --host 0.0.0.0 \
+  --port 8083
+
+Prompt preparation:
+cat > /tmp/prompt-dijkstra.txt <<'PROMPT'
+Write a JavaScript function that finds the shortest path in a weighted directed graph using Dijkstra's algorithm.
+
+Requirements:
+- Use JavaScript, not TypeScript.
+- Input should be an adjacency list.
+- Return both the total distance and the actual path.
+- Handle unreachable target nodes correctly.
+- Include a small example input and expected output.
+- Keep the explanation concise.
+- Prioritize correctness, clarity, and robustness.
+PROMPT
+
+Request payload generation:
+python3 - <<'PY' > /tmp/request-dijkstra.json
+import json
+
+with open("/tmp/prompt-dijkstra.txt", "r", encoding="utf-8") as f:
+    prompt = f.read()
+
+payload = {
+    "model": "Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0-5090",
+    "messages": [
+        {"role": "user", "content": prompt}
+    ],
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "max_tokens": 2500,
+    "stream": False
+}
+
+print(json.dumps(payload, ensure_ascii=False, indent=2))
+PY
+
+Request command:
+curl http://localhost:8083/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d @/tmp/request-dijkstra.json \
+  | tee ~/blackbeard-bench-runs/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0-5090-prompt01-dijkstra-response.json
+
+Saved response file on node:
+~/blackbeard-bench-runs/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0-5090-prompt01-dijkstra-response.json
+
+Backend identity:
+Backend dir: /home/blackbeard/llm-backends/llama.cpp-main
+Remote: https://github.com/ggml-org/llama.cpp
+Branch: master
+Commit: 6ed481eea4cf4ed40777db2fa29e8d08eb712b3b
+Last commit: 6ed481eea (HEAD -> master, origin/master, origin/HEAD) CUDA: Check PTX version on host side to guard PDL dispatch (#23530)
+Git status: clean in captured output
+Build directory: build-cuda-20260529
+Binaries:
+- build-cuda-20260529/bin/llama-cli
+- build-cuda-20260529/bin/llama-bench
+- build-cuda-20260529/bin/llama-server
+
+Version output:
+llama-server:
+version: 9413 (6ed481eea)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-cli:
+version: 9413 (6ed481eea)
+built with GNU 13.3.0 for Linux x86_64
+
+llama-bench:
+ggml_cuda_init: found 1 CUDA devices (Total VRAM: 32110 MiB):
+  Device 0: NVIDIA GeForce RTX 5090, compute capability 12.0, VMM: yes, VRAM: 32110 MiB
+error: invalid parameter for argument: --version
+
+Selected CMake/build flags:
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CUDA_COMPILER:FILEPATH=/usr/local/cuda-13.2/bin/nvcc
+CUDAToolkit_BIN_DIR:PATH=/usr/local/cuda-13.2/bin
+CUDA_cublas_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcublas.so
+CUDA_cudart_LIBRARY:FILEPATH=/usr/local/cuda-13.2/targets/x86_64-linux/lib/libcudart.so
+GGML_CPU:BOOL=ON
+GGML_CUDA:BOOL=ON
+GGML_CUDA_COMPRESSION_MODE:STRING=size
+GGML_CUDA_FA:BOOL=ON
+GGML_CUDA_FA_ALL_QUANTS:BOOL=OFF
+GGML_CUDA_FORCE_CUBLAS:BOOL=OFF
+GGML_CUDA_FORCE_MMQ:BOOL=OFF
+GGML_CUDA_GRAPHS:BOOL=ON
+GGML_CUDA_NCCL:BOOL=ON
+GGML_CUDA_NO_PEER_COPY:BOOL=OFF
+GGML_CUDA_NO_VMM:BOOL=OFF
+GGML_CUDA_PEER_MAX_BATCH_SIZE:STRING=128
+GGML_LLAMAFILE:BOOL=ON
+GGML_METAL:BOOL=OFF
+
+Server startup excerpt:
+0.00.128.956 I log_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.193.490 I   - CUDA0   : NVIDIA GeForce RTX 5090 (32110 MiB, 31590 MiB free)
+0.00.193.499 I   - CPU     : AMD Ryzen 9 9950X3D 16-Core Processor (255324 MiB, 255324 MiB free)
+0.00.193.587 I system_info: n_threads = 16 (n_threads_batch = 16) / 32 | CUDA : ARCHS = 1200 | USE_GRAPHS = 1 | PEER_MAX_BATCH_SIZE = 128 | BLACKWELL_NATIVE_FP4 = 1 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | AVX512 = 1 | AVX512_VBMI = 1 | AVX512_VNNI = 1 | AVX512_BF16 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 |
+0.00.194.908 I srv    load_model: loading model '/mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-GGUF/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0.gguf'
+0.00.435.320 I srv    load_model: [spec] estimated memory usage of MTP context is 1203.00 MiB
+0.00.680.202 W common_fit_params: failed to fit params to free device memory: n_gpu_layers already set by user to 999, abort
+0.01.784.756 W llama_context: n_ctx_seq (150016) < n_ctx_train (262144) -- the full capacity of the model will not be utilized
+0.01.835.180 I common_init_from_params: warming up the model with an empty run - please wait ... (--no-warmup to disable)
+0.01.875.528 I srv    load_model: creating MTP draft context against the target model '/mnt/5e8a92dc-efd9-4671-90c7-cb3ba7348757/share/Models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-GGUF/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0.gguf'
+0.01.875.553 W llama_context: n_ctx_seq (150016) < n_ctx_train (262144) -- the full capacity of the model will not be utilized
+0.01.914.626 I srv    load_model: initializing slots, n_slots = 1
+0.01.952.146 I common_speculative_impl_draft_mtp: adding speculative implementation 'draft-mtp'
+0.01.952.149 I common_speculative_impl_draft_mtp: - n_max=3, n_min=0, p_min=0.00, n_embd=5120, backend_sampling=1
+0.01.952.150 I common_speculative_impl_draft_mtp: - gpu_layers=-1, cache_k=f16, cache_v=f16, ctx_tgt=yes, ctx_dft=yes, devices=[default]
+0.01.952.256 I srv    load_model: speculative decoding context initialized
+0.01.952.256 I slot   load_model: id  0 | task -1 | new slot, n_ctx = 150016
+0.01.952.293 I srv    load_model: prompt cache is enabled, size limit: 8192 MiB
+0.01.952.295 I srv    load_model: context checkpoints enabled, max = 32, min spacing = 256
+0.01.952.325 W srv          init: --cache-idle-slots requires --kv-unified, disabling
+0.01.970.091 I srv          init: init: chat template, thinking = 1
+0.01.970.137 I srv  llama_server: model loaded
+0.01.970.141 I srv  llama_server: server is listening on http://0.0.0.0:8083
+0.01.970.149 I srv  update_slots: all slots are idle
+
+Server request/timing excerpt:
+0.44.294.974 I srv  params_from_: Chat format: peg-native
+0.44.295.112 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.44.295.120 I srv          load:  - looking for better prompt, base f_keep = -1.000, sim = 0.000
+0.44.295.126 I srv        update:  - cache state: 0 prompts, 0.000 MiB (limits: 8192.000 MiB, 150016 tokens, 8589934592 est)
+0.44.295.127 I srv  get_availabl: prompt cache update took 0.01 ms
+0.44.295.185 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.44.447.918 I slot create_check: id  0 | task 0 | created context checkpoint 1 of 32 (pos_min = 95, pos_max = 95, n_tokens = 96, size = 150.003 MiB)
+0.45.083.782 I slot print_timing: id  0 | task 0 | n_decoded =    100, tg = 162.81 t/s
+0.48.099.935 I slot print_timing: id  0 | task 0 | n_decoded =    512, tg = 141.03 t/s
+0.51.114.641 I slot print_timing: id  0 | task 0 | n_decoded =    921, tg = 138.60 t/s
+0.54.131.082 I slot print_timing: id  0 | task 0 | n_decoded =   1399, tg = 144.80 t/s
+0.57.133.141 I slot print_timing: id  0 | task 0 | n_decoded =   1859, tg = 146.80 t/s
+1.00.133.732 I slot print_timing: id  0 | task 0 | n_decoded =   2272, tg = 145.04 t/s
+1.01.454.336 I slot print_timing: id  0 | task 0 | prompt eval time =     174.24 ms /   100 tokens (    1.74 ms per token,   573.91 tokens per second)
+1.01.454.339 I slot print_timing: id  0 | task 0 |        eval time =   16984.77 ms /  2500 tokens (    6.79 ms per token,   147.19 tokens per second)
+1.01.454.340 I slot print_timing: id  0 | task 0 |       total time =   17159.01 ms /  2600 tokens
+1.01.454.345 I slot print_timing: id  0 | task 0 |    graphs reused =        756
+1.01.454.346 I slot print_timing: id  0 | task 0 | draft acceptance = 0.75413 ( 1733 accepted /  2298 generated)
+1.01.454.370 I statistics        draft-mtp: #calls(b,g,a) =    1    766    766, #gen drafts =    766, #acc drafts =   685, #gen tokens =   2298, #acc tokens =  1733, dur(b,g,a) = 0.002, 2809.872, 0.385 ms
+1.01.454.407 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2599, truncated = 0
+1.01.454.424 I srv  update_slots: all slots are idle
+
+Response metadata:
+finish_reason: length
+created: 1780147895
+requested model string: Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0-5090
+returned model string: Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preserved-NVFP4-MLP-Only-Q8_0.gguf
+system_fingerprint: b9413-6ed481eea
+object: chat.completion
+completion_tokens: 2500
+prompt_tokens: 100
+total_tokens: 2600
+cached_tokens: 0
+cache_n: 0
+prompt_n: 100
+prompt_ms: 174.244
+prompt_per_second: 573.9078533550653
+predicted_n: 2500
+predicted_ms: 16984.769
+predicted_per_second: 147.19069773630716
+draft_n: 2298
+draft_n_accepted: 1733
+
+Observed screenshot:
+2026-05-30 16:31:23: RTX 5090, 31167MiB / 32607MiB, 96-97% util, 493W / 500W, 54C.
+
+Derived summary:
+Cold prompt eval: 100 tokens at 573.91 tok/s, cached_tokens=0.
+Generation: 2500 tokens at 147.19 tok/s.
+Total: 17159.01 ms / 2600 tokens.
+Draft acceptance: 0.75413, 1733 accepted / 2298 generated.
+The response hit finish_reason=length and stopped inside reasoning_content without a final answer in message.content.

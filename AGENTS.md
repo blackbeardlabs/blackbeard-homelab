@@ -31,6 +31,13 @@ When recording a benchmark run, update the related files together:
 - Model response in `responses/` when the output is useful for quality review. Preserve the response as observed and keep human notes separate.
 - `CHANGELOG.md` entry describing the benchmark, raw log, response, prompt, or documentation change.
 
+For benchmarked model identity:
+
+- Record whether the model is an official/upstream model or a finetune/merge/variant.
+- If the model is a finetune, merge, community GGUF, or other derivative, include the person, group, or organization responsible for that variant in the benchmark metadata and preferably in benchmark/raw-log/response file names.
+- If the model is official/upstream, use an explicit source label such as `qwen-official` when it helps distinguish it from finetunes.
+- If the user provides benchmark data but does not say whether the model is official or who made the finetune/variant, treat that as missing benchmark metadata and ask before finalizing the benchmark record.
+
 For controlled direct API runs:
 
 - Use manual copy-paste curl templates from `benchmarks/direct-api-curl.md`.

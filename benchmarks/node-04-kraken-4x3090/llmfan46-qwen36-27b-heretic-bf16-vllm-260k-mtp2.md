@@ -86,8 +86,8 @@ vllm serve ~/models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preser
 | Prefix cache hit rate | 0.0% |
 | Speculative decoding | MTP, 2 speculative tokens |
 | Draft acceptance rate | Mostly ~65-94% depending on phase |
-| Raw log | `raw-logs/2026-05-29-node-04-qwen36-heretic-prompt-01-dijkstra.log` |
-| Response | `responses/node-04-kraken-4x3090/2026-05-29-qwen36-heretic-prompt-01-dijkstra.md` |
+| Raw log | `raw-logs/2026-05-29-node-04-llmfan46-qwen36-heretic-prompt-01-dijkstra.log` |
+| Response | `responses/node-04-kraken-4x3090/2026-05-29-llmfan46-qwen36-heretic-prompt-01-dijkstra.md` |
 
 ## Run: 2026-05-29 prompt-02 heterogeneous scheduler
 
@@ -102,8 +102,8 @@ vllm serve ~/models/llmfan46/Qwen3.6-27B-uncensored-heretic-v2-Native-MTP-Preser
 | Prefix cache hit rate | 0.0% |
 | Speculative decoding | MTP, 2 speculative tokens |
 | Draft acceptance rate | Mostly ~50-80% during main response, with a later 95.7% tail sample |
-| Raw log | `raw-logs/2026-05-29-node-04-qwen36-heretic-prompt-02-scheduler.log` |
-| Response | `responses/node-04-kraken-4x3090/2026-05-29-qwen36-heretic-prompt-02-scheduler.md` |
+| Raw log | `raw-logs/2026-05-29-node-04-llmfan46-qwen36-heretic-prompt-02-scheduler.log` |
+| Response | `responses/node-04-kraken-4x3090/2026-05-29-llmfan46-qwen36-heretic-prompt-02-scheduler.md` |
 | Notes | The later 14:16:11 prompt-throughput spike may reflect OpenWebUI/UI-layer activity; it is not included in the main steady average. |
 
 ## Stability notes

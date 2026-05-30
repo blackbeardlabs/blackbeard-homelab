@@ -11,8 +11,8 @@
 | Prompt id | `prompts/prompt-02-heterogeneous-scheduler.md` |
 | Request method | OpenWebUI |
 | Sampling params | OpenWebUI defaults; exact sampling parameters not explicitly captured |
-| Benchmark | `benchmarks/node-04-kraken-4x3090/qwen36-27b-heretic-bf16-vllm-260k-mtp2.md` |
-| Raw log | `raw-logs/2026-05-29-node-04-qwen36-heretic-prompt-02-scheduler.log` |
+| Benchmark | `benchmarks/node-04-kraken-4x3090/llmfan46-qwen36-27b-heretic-bf16-vllm-260k-mtp2.md` |
+| Raw log | `raw-logs/2026-05-29-node-04-llmfan46-qwen36-heretic-prompt-02-scheduler.log` |
 
 ## Human notes
 
